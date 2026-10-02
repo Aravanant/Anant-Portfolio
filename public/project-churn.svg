@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <defs>
+    <linearGradient id="churnBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e1726"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="churnOrange" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="320" height="200" rx="8" fill="url(#churnBg)"/>
+  <!-- Top bar -->
+  <rect x="0" y="0" width="320" height="24" rx="8" fill="#1e293b"/>
+  <circle cx="16" cy="12" r="3" fill="#ef4444"/>
+  <circle cx="26" cy="12" r="3" fill="#f59e0b"/>
+  <circle cx="36" cy="12" r="3" fill="#10b981"/>
+  <rect x="55" y="6" width="130" height="12" rx="4" fill="#334155"/>
+  <text x="60" y="15" fill="#cbd5e1" font-size="7" font-family="sans-serif">churn_prediction_eda.ipynb</text>
+
+  <!-- KPI Cards Row -->
+  <rect x="12" y="32" width="90" height="42" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="20" y="46" fill="#94a3b8" font-size="7" font-family="sans-serif">Churn Rate</text>
+  <text x="20" y="64" fill="#f97316" font-size="14" font-weight="bold" font-family="sans-serif">26.8%</text>
+
+  <rect x="110" y="32" width="95" height="42" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="118" y="46" fill="#94a3b8" font-size="7" font-family="sans-serif">Model ROC-AUC</text>
+  <text x="118" y="64" fill="#38bdf8" font-size="14" font-weight="bold" font-family="sans-serif">0.842</text>
+
+  <rect x="213" y="32" width="95" height="42" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="221" y="46" fill="#94a3b8" font-size="7" font-family="sans-serif">Analyzed Users</text>
+  <text x="221" y="64" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif">7,043</text>
+
+  <!-- Correlation Bar Chart -->
+  <rect x="12" y="82" width="180" height="106" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="20" y="96" fill="#cbd5e1" font-size="8" font-weight="bold" font-family="sans-serif">Key Churn Feature Importance</text>
+  <!-- Bars -->
+  <text x="20" y="114" fill="#94a3b8" font-size="6" font-family="sans-serif">Contract Type (M-to-M)</text>
+  <rect x="20" y="118" width="145" height="8" rx="3" fill="url(#churnOrange)"/>
+
+  <text x="20" y="136" fill="#94a3b8" font-size="6" font-family="sans-serif">Tech Support (None)</text>
+  <rect x="20" y="140" width="115" height="8" rx="3" fill="#f97316" opacity="0.8"/>
+
+  <text x="20" y="158" fill="#94a3b8" font-size="6" font-family="sans-serif">Fiber Optic Internet</text>
+  <rect x="20" y="162" width="85" height="8" rx="3" fill="#f97316" opacity="0.6"/>
+
+  <text x="20" y="180" fill="#94a3b8" font-size="6" font-family="sans-serif">Tenure Months</text>
+  <rect x="20" y="182" width="60" height="4" rx="2" fill="#38bdf8"/>
+
+  <!-- Right Confusion Matrix / Gauge -->
+  <rect x="200" y="82" width="108" height="106" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="208" y="96" fill="#cbd5e1" font-size="8" font-weight="bold" font-family="sans-serif">Classification Matrix</text>
+  <!-- 2x2 grid -->
+  <rect x="208" y="104" width="46" height="38" rx="3" fill="#15803d"/>
+  <text x="231" y="127" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">4,812</text>
+  
+  <rect x="258" y="104" width="46" height="38" rx="3" fill="#334155"/>
+  <text x="281" y="127" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="sans-serif">362</text>
+
+  <rect x="208" y="146" width="46" height="36" rx="3" fill="#334155"/>
+  <text x="231" y="168" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="sans-serif">510</text>
+
+  <rect x="258" y="146" width="46" height="36" rx="3" fill="#ea580c"/>
+  <text x="281" y="168" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">1,359</text>
+</svg>

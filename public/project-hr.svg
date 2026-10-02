@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <defs>
+    <linearGradient id="hrBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#121820"/>
+      <stop offset="100%" stop-color="#1c2430"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="200" rx="8" fill="url(#hrBg)"/>
+  <!-- Top Bar -->
+  <rect x="0" y="0" width="320" height="24" rx="8" fill="#1e293b"/>
+  <circle cx="16" cy="12" r="3" fill="#ef4444"/>
+  <circle cx="26" cy="12" r="3" fill="#f59e0b"/>
+  <circle cx="36" cy="12" r="3" fill="#10b981"/>
+  <text x="50" y="16" fill="#f8fafc" font-size="8" font-weight="bold" font-family="sans-serif">HR Analytics &amp; Workforce Attrition Study</text>
+
+  <!-- Left Donut and KPI -->
+  <rect x="12" y="32" width="125" height="158" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="20" y="46" fill="#cbd5e1" font-size="8" font-weight="bold" font-family="sans-serif">Overall Turnover Rate</text>
+  <!-- Mini Donut -->
+  <circle cx="74" cy="95" r="30" fill="none" stroke="#334155" stroke-width="10"/>
+  <circle cx="74" cy="95" r="30" fill="none" stroke="#f97316" stroke-width="10" stroke-dasharray="35 153" stroke-dashoffset="0" transform="rotate(-90 74 95)"/>
+  <text x="74" y="99" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">18.4%</text>
+
+  <rect x="20" y="145" width="109" height="18" rx="3" fill="#1e293b"/>
+  <text x="26" y="157" fill="#cbd5e1" font-size="7" font-family="sans-serif">Voluntary: <tspan fill="#f97316" font-weight="bold">78%</tspan></text>
+  <rect x="20" y="167" width="109" height="18" rx="3" fill="#1e293b"/>
+  <text x="26" y="179" fill="#cbd5e1" font-size="7" font-family="sans-serif">Involuntary: <tspan fill="#94a3b8" font-weight="bold">22%</tspan></text>
+
+  <!-- Right Department Breakdown Bars -->
+  <rect x="145" y="32" width="163" height="158" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="155" y="46" fill="#cbd5e1" font-size="8" font-weight="bold" font-family="sans-serif">Attrition by Department (Chi-Square p &lt; 0.05)</text>
+
+  <text x="155" y="65" fill="#cbd5e1" font-size="7" font-family="sans-serif">Sales &amp; Business Dev (28.4%)</text>
+  <rect x="155" y="70" width="140" height="10" rx="3" fill="#1e293b"/>
+  <rect x="155" y="70" width="112" height="10" rx="3" fill="#ea580c"/>
+
+  <text x="155" y="95" fill="#cbd5e1" font-size="7" font-family="sans-serif">R&amp;D / Engineering (14.2%)</text>
+  <rect x="155" y="100" width="140" height="10" rx="3" fill="#1e293b"/>
+  <rect x="155" y="100" width="56" height="10" rx="3" fill="#f97316"/>
+
+  <text x="155" y="125" fill="#cbd5e1" font-size="7" font-family="sans-serif">Customer Support (22.8%)</text>
+  <rect x="155" y="130" width="140" height="10" rx="3" fill="#1e293b"/>
+  <rect x="155" y="130" width="88" height="10" rx="3" fill="#f59e0b"/>
+
+  <text x="155" y="155" fill="#cbd5e1" font-size="7" font-family="sans-serif">Operations &amp; HR (9.1%)</text>
+  <rect x="155" y="160" width="140" height="10" rx="3" fill="#1e293b"/>
+  <rect x="155" y="160" width="36" height="10" rx="3" fill="#22c55e"/>
+</svg>

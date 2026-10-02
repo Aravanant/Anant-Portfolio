@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <defs>
+    <linearGradient id="scBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1622"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="200" rx="8" fill="url(#scBg)"/>
+  <!-- Top Bar -->
+  <rect x="0" y="0" width="320" height="24" rx="8" fill="#1e293b"/>
+  <circle cx="16" cy="12" r="3" fill="#ef4444"/>
+  <circle cx="26" cy="12" r="3" fill="#f59e0b"/>
+  <circle cx="36" cy="12" r="3" fill="#10b981"/>
+  <text x="50" y="16" fill="#f8fafc" font-size="8" font-weight="bold" font-family="sans-serif">Tableau Supply Chain &amp; Logistics KPI Story</text>
+
+  <!-- Left Map / Route Network Graphic -->
+  <rect x="12" y="32" width="145" height="158" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="20" y="46" fill="#cbd5e1" font-size="8" font-weight="bold" font-family="sans-serif">Regional Fulfillment Bottlenecks</text>
+  <!-- Hub circles and route lines -->
+  <path d="M 35,70 Q 75,60 115,85" stroke="#f97316" stroke-width="2" stroke-dasharray="2 2" fill="none"/>
+  <path d="M 35,70 Q 60,110 80,140" stroke="#06b6d4" stroke-width="2" fill="none"/>
+  <path d="M 115,85 Q 100,120 80,140" stroke="#f59e0b" stroke-width="2" fill="none"/>
+
+  <circle cx="35" cy="70" r="7" fill="#0f172a" stroke="#06b6d4" stroke-width="2"/>
+  <text x="35" y="73" fill="#ffffff" font-size="6" font-weight="bold" text-anchor="middle">West</text>
+
+  <circle cx="115" cy="85" r="9" fill="#ea580c" stroke="#f97316" stroke-width="2"/>
+  <text x="115" y="88" fill="#ffffff" font-size="6" font-weight="bold" text-anchor="middle">Midwest</text>
+  <text x="115" y="103" fill="#f97316" font-size="6" text-anchor="middle">Delay: 4.8d</text>
+
+  <circle cx="80" cy="140" r="7" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+  <text x="80" y="143" fill="#ffffff" font-size="6" font-weight="bold" text-anchor="middle">South</text>
+
+  <!-- Right Metrics and Delay Distribution -->
+  <rect x="165" y="32" width="143" height="48" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="173" y="46" fill="#94a3b8" font-size="7" font-family="sans-serif">Avg Delivery Time</text>
+  <text x="173" y="66" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif">3.2 Days <tspan fill="#22c55e" font-size="8">-33%</tspan></text>
+
+  <rect x="165" y="86" width="143" height="104" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="173" y="100" fill="#cbd5e1" font-size="7.5" font-weight="bold" font-family="sans-serif">Delay ANOVA Hypothesis Test</text>
+  <text x="173" y="114" fill="#f97316" font-size="7" font-family="sans-serif">F-Stat: 42.8 | p-value &lt; 0.001</text>
+
+  <!-- Distribution Bars -->
+  <rect x="173" y="124" width="125" height="10" rx="3" fill="#1e293b"/>
+  <rect x="173" y="124" width="98" height="10" rx="3" fill="#f97316"/>
+  <text x="178" y="132" fill="#ffffff" font-size="6" font-family="sans-serif">Air Cargo: 1.8d</text>
+
+  <rect x="173" y="140" width="125" height="10" rx="3" fill="#1e293b"/>
+  <rect x="173" y="140" width="70" height="10" rx="3" fill="#f59e0b"/>
+  <text x="178" y="148" fill="#ffffff" font-size="6" font-family="sans-serif">Interstate Rail: 3.4d</text>
+
+  <rect x="173" y="156" width="125" height="10" rx="3" fill="#1e293b"/>
+  <rect x="173" y="156" width="45" height="10" rx="3" fill="#ea580c"/>
+  <text x="178" y="164" fill="#ffffff" font-size="6" font-family="sans-serif">Truck Ground: 4.8d</text>
+</svg>

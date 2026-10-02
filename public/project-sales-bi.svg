@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <defs>
+    <linearGradient id="pbiBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141a24"/>
+      <stop offset="100%" stop-color="#0b1018"/>
+    </linearGradient>
+    <linearGradient id="pbiArea" x1="0%" y1="0%" x2="0%" y2="1">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ea580c" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="200" rx="8" fill="url(#pbiBg)"/>
+  <!-- Top Bar -->
+  <rect x="0" y="0" width="320" height="24" rx="8" fill="#1e293b"/>
+  <!-- Power BI icon symbol (yellow vertical bars) -->
+  <rect x="12" y="8" width="3" height="8" rx="1" fill="#f59e0b"/>
+  <rect x="17" y="5" width="3" height="14" rx="1" fill="#f59e0b"/>
+  <rect x="22" y="11" width="3" height="5" rx="1" fill="#f59e0b"/>
+  <text x="32" y="16" fill="#f8fafc" font-size="8" font-weight="bold" font-family="sans-serif">Power BI Executive Sales Performance</text>
+  <rect x="240" y="5" width="70" height="14" rx="3" fill="#334155"/>
+  <text x="245" y="15" fill="#f59e0b" font-size="7" font-family="sans-serif">FY 2024 • Q1-Q4</text>
+
+  <!-- Left Slicers -->
+  <rect x="10" y="32" width="70" height="158" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="16" y="45" fill="#94a3b8" font-size="7" font-weight="bold" font-family="sans-serif">Territory Filter</text>
+  <rect x="16" y="52" width="58" height="14" rx="3" fill="#f97316"/>
+  <text x="20" y="62" fill="#ffffff" font-size="7" font-weight="bold" font-family="sans-serif">✓ North America</text>
+  <rect x="16" y="70" width="58" height="14" rx="3" fill="#1e293b"/>
+  <text x="20" y="80" fill="#cbd5e1" font-size="7" font-family="sans-serif">Europe</text>
+  <rect x="16" y="88" width="58" height="14" rx="3" fill="#1e293b"/>
+  <text x="20" y="98" fill="#cbd5e1" font-size="7" font-family="sans-serif">Asia-Pacific</text>
+
+  <text x="16" y="120" fill="#94a3b8" font-size="7" font-weight="bold" font-family="sans-serif">Product Line</text>
+  <rect x="16" y="126" width="58" height="14" rx="3" fill="#1e293b"/>
+  <text x="20" y="136" fill="#cbd5e1" font-size="7" font-family="sans-serif">Enterprise</text>
+  <rect x="16" y="144" width="58" height="14" rx="3" fill="#1e293b"/>
+  <text x="20" y="154" fill="#cbd5e1" font-size="7" font-family="sans-serif">Consumer</text>
+
+  <!-- KPI Cards Center -->
+  <rect x="86" y="32" width="105" height="38" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="94" y="44" fill="#94a3b8" font-size="6.5" font-family="sans-serif">Total Revenue</text>
+  <text x="94" y="60" fill="#ffffff" font-size="12" font-weight="bold" font-family="sans-serif">$2.48M <tspan fill="#22c55e" font-size="8">+14.2%</tspan></text>
+
+  <rect x="198" y="32" width="112" height="38" rx="4" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="206" y="44" fill="#94a3b8" font-size="6.5" font-family="sans-serif">Gross Margin Rate</text>
+  <text x="206" y="60" fill="#f59e0b" font-size="12" font-weight="bold" font-family="sans-serif">41.8% <tspan fill="#94a3b8" font-size="7">Target 40%</tspan></text>
+
+  <!-- Main Trendline Area Chart -->
+  <rect x="86" y="76" width="224" height="114" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <text x="94" y="90" fill="#cbd5e1" font-size="8" font-weight="bold" font-family="sans-serif">Monthly Sales vs Target (DAX Measures)</text>
+  <svg x="86" y="96" width="224" height="90" viewBox="0 0 224 90">
+    <path d="M 10,70 Q 50,55 80,40 T 140,45 T 190,15 L 210,22 L 210,85 L 10,85 Z" fill="url(#pbiArea)"/>
+    <!-- Target line (dashed white) -->
+    <path d="M 10,50 L 210,30" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <!-- Actual line (amber) -->
+    <path d="M 10,70 Q 50,55 80,40 T 140,45 T 190,15 L 210,22" stroke="#f59e0b" stroke-width="2.5" fill="none"/>
+    <circle cx="80" cy="40" r="3" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+    <circle cx="140" cy="45" r="3" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+    <circle cx="190" cy="15" r="3.5" fill="#f97316" stroke="#ffffff" stroke-width="1.5"/>
+  </svg>
+</svg>
