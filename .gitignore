@@ -32,3 +32,8 @@ dist-ssr/
 
 # Scratch / temp
 .tempmediaStorage/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local

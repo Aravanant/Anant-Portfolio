@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
+  fetchExperiencesService,
+  saveExperienceService,
+  deleteExperienceService,
+  isAdminAuthenticated,
+} from './supabase';
+import AdminAuthModal from './AdminAuthModal';
+import {
   LogoIcon,
   DownloadIcon,
   MoonIcon,
@@ -30,6 +37,9 @@ export default function ExperiencePage({ onNavigate }) {
   const [copiedRefId, setCopiedRefId] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [activeAddTab, setActiveAddTab] = useState('form'); // 'form' | 'code'
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [pendingAdminAction, setPendingAdminAction] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Input form state for new experience entry
   const [newExpForm, setNewExpForm] = useState({
@@ -71,9 +81,7 @@ export default function ExperiencePage({ onNavigate }) {
   };
 
   // =========================================================================
-  // CORPORATE / WORK EXPERIENCE DATA (SAFE CONTAINER FOR FUTURE ROLES)
-  // No fake or dummy data is included. When you secure internships or full-time roles,
-  // add them here or via the interactive "+ Add Experience" button in the UI.
+  // CORPORATE / WORK EXPERIENCE DATA (SYNCED WITH SUPABASE CLOUD & LOCAL CACHE)
   // =========================================================================
   const [workExperiences, setWorkExperiences] = useState(() => {
     try {
@@ -87,17 +95,27 @@ export default function ExperiencePage({ onNavigate }) {
     return [];
   });
 
-  // Sync added experiences to localStorage
+  // Fetch experiences from Supabase on component mount
   useEffect(() => {
-    try {
-      localStorage.setItem('anant_portfolio_experience', JSON.stringify(workExperiences));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [workExperiences]);
+    fetchExperiencesService().then((data) => {
+      if (data && Array.isArray(data)) {
+        setWorkExperiences(data);
+      }
+    });
+  }, []);
 
-  // Handle adding new work experience
-  const handleAddExperience = (e) => {
+  // Admin gate for opening Add Experience modal
+  const handleOpenAddModal = () => {
+    if (!isAdminAuthenticated()) {
+      setPendingAdminAction(() => () => setShowAddModal(true));
+      setShowAdminModal(true);
+      return;
+    }
+    setShowAddModal(true);
+  };
+
+  // Handle adding new work experience (Cloud + Local)
+  const handleAddExperience = async (e) => {
     e?.preventDefault();
     if (!newExpForm.role.trim() || !newExpForm.company.trim()) return;
 
@@ -130,28 +148,56 @@ export default function ExperiencePage({ onNavigate }) {
       status: 'Verified',
     };
 
-    setWorkExperiences((prev) => [...prev, newEntry]);
-    setNewExpForm({
-      role: '',
-      company: '',
-      type: 'Internship',
-      duration: '',
-      location: '',
-      responsibilities: '',
-      skillsUsed: '',
-      document: '',
-      referenceId: '',
-      verificationUrl: '',
-    });
-    setShowAddModal(false);
+    try {
+      setIsSubmitting(true);
+      await saveExperienceService(newEntry);
+      setWorkExperiences((prev) => [newEntry, ...prev.filter((exp) => exp.id !== newEntry.id)]);
+      setNewExpForm({
+        role: '',
+        company: '',
+        type: 'Internship',
+        duration: '',
+        location: '',
+        responsibilities: '',
+        skillsUsed: '',
+        document: '',
+        referenceId: '',
+        verificationUrl: '',
+      });
+      setShowAddModal(false);
+    } catch (err) {
+      console.error('Error saving experience:', err);
+      // Fallback
+      setWorkExperiences((prev) => [newEntry, ...prev.filter((exp) => exp.id !== newEntry.id)]);
+      setShowAddModal(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  // Handle removing an added experience
+  // Handle removing an added experience (Cloud + Local with Admin check)
   const handleRemoveExperience = (id, e) => {
     e?.stopPropagation();
-    setWorkExperiences((prev) => prev.filter((exp) => exp.id !== id));
-    if (selectedExpDoc?.id === id) {
-      setSelectedExpDoc(null);
+    if (!isAdminAuthenticated()) {
+      setPendingAdminAction(() => () => executeDeleteExperience(id));
+      setShowAdminModal(true);
+      return;
+    }
+    if (window.confirm('Are you sure you want to delete this experience entry from the live portfolio?')) {
+      executeDeleteExperience(id);
+    }
+  };
+
+  const executeDeleteExperience = async (id) => {
+    try {
+      await deleteExperienceService(id);
+      setWorkExperiences((prev) => prev.filter((exp) => exp.id !== id));
+      if (selectedExpDoc?.id === id) {
+        setSelectedExpDoc(null);
+      }
+    } catch (err) {
+      console.error('Error deleting experience:', err);
+      alert('Error removing experience from database.');
     }
   };
 
@@ -1277,7 +1323,7 @@ export default function ExperiencePage({ onNavigate }) {
 
                 <button
                   type="button"
-                  onClick={() => setShowAddModal(true)}
+                  onClick={handleOpenAddModal}
                   className="btn-primary"
                   style={{
                     padding: '12px 20px',
@@ -1298,7 +1344,7 @@ export default function ExperiencePage({ onNavigate }) {
 
               {/* + Add New Experience Action Card */}
               <div
-                onClick={() => setShowAddModal(true)}
+                onClick={handleOpenAddModal}
                 style={{
                   padding: '32px 28px',
                   borderRadius: '20px',
@@ -1632,7 +1678,7 @@ export default function ExperiencePage({ onNavigate }) {
 
               {/* + Add New Experience Card in Grid */}
               <div
-                onClick={() => setShowAddModal(true)}
+                onClick={handleOpenAddModal}
                 style={{
                   padding: '28px',
                   borderRadius: '20px',
@@ -2426,6 +2472,23 @@ export default function ExperiencePage({ onNavigate }) {
           </span>
         </div>
       </footer>
+
+      {/* Admin Authentication Modal */}
+      <AdminAuthModal
+        isOpen={showAdminModal}
+        onClose={() => {
+          setShowAdminModal(false);
+          setPendingAdminAction(null);
+        }}
+        onSuccess={() => {
+          if (pendingAdminAction) {
+            const action = pendingAdminAction;
+            setPendingAdminAction(null);
+            action();
+          }
+        }}
+        title="Admin Verification"
+      />
     </div>
   );
 }

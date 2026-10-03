@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
+  fetchExperiencesService,
+  fetchProjectsService,
+  fetchCertificatesService,
+} from './supabase';
+import {
   DownloadIcon,
   ArrowRightIcon,
   ExternalLinkIcon,
@@ -46,6 +51,19 @@ export default function ResumePage({ onNavigate, isModal = false, onClose }) {
       return [];
     }
   });
+
+  // Fetch fresh data from Supabase on mount
+  useEffect(() => {
+    fetchExperiencesService().then((data) => {
+      if (data && Array.isArray(data)) setExperiences(data);
+    });
+    fetchCertificatesService().then((data) => {
+      if (data && Array.isArray(data)) setCertificates(data);
+    });
+    fetchProjectsService().then((data) => {
+      if (data && Array.isArray(data)) setProjects(data);
+    });
+  }, []);
 
   // Listen for storage changes if user adds experience or certifications in another tab
   useEffect(() => {

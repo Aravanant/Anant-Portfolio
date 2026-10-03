@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
+  fetchCertificatesService,
+  saveCertificateService,
+  deleteCertificateService,
+  isAdminAuthenticated,
+} from './supabase';
+import AdminAuthModal from './AdminAuthModal';
+import {
   LogoIcon,
   DownloadIcon,
   MoonIcon,
@@ -24,6 +31,9 @@ export default function SkillsPage({ onNavigate }) {
   const [copiedId, setCopiedId] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [activeAddTab, setActiveAddTab] = useState('form'); // 'form' | 'code'
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [pendingAdminAction, setPendingAdminAction] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Certificate input form state
   const [newCertForm, setNewCertForm] = useState({
@@ -62,27 +72,13 @@ export default function SkillsPage({ onNavigate }) {
   };
 
   // =========================================================================
-  // CERTIFICATES & CREDENTIALS DATA (SAFE & READY FOR FUTURE CERTIFICATES)
-  // When you obtain real certificates, add them here or use the "+ Add Certificate" button.
-  // Sample structure:
-  // {
-  //   id: 'cert-1',
-  //   title: 'Microsoft Certified: Power BI Data Analyst Associate',
-  //   issuer: 'Microsoft',
-  //   credentialId: 'MS-PL300-XXXXX',
-  //   issueDate: 'Issued 2024',
-  //   verificationUrl: 'https://learn.microsoft.com/...',
-  //   skillsCovered: ['Power BI', 'DAX', 'SQL', 'Data Modeling'],
-  //   image: '/my-cert.png', // or .pdf in /public folder or uploaded file
-  //   status: 'Verified',
-  // }
+  // CERTIFICATES DATA (SYNCED WITH SUPABASE CLOUD & LOCAL STORAGE)
   // =========================================================================
   const [certificates, setCertificates] = useState(() => {
     try {
       const saved = localStorage.getItem('anant_portfolio_certificates');
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Exclude legacy mock items if any existed in localStorage
         return parsed.filter(
           (c) =>
             !['cert-1', 'cert-2', 'cert-3'].includes(c.id) &&
@@ -97,17 +93,27 @@ export default function SkillsPage({ onNavigate }) {
     return [];
   });
 
-  // Sync added certificates to localStorage
+  // Fetch certificates from Supabase on mount
   useEffect(() => {
-    try {
-      localStorage.setItem('anant_portfolio_certificates', JSON.stringify(certificates));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [certificates]);
+    fetchCertificatesService().then((data) => {
+      if (data && Array.isArray(data)) {
+        setCertificates(data);
+      }
+    });
+  }, []);
 
-  // Handle adding a new certificate dynamically
-  const handleAddCertificate = (e) => {
+  // Admin gate for opening Add Certificate modal
+  const handleOpenAddModal = () => {
+    if (!isAdminAuthenticated()) {
+      setPendingAdminAction(() => () => setShowAddModal(true));
+      setShowAdminModal(true);
+      return;
+    }
+    setShowAddModal(true);
+  };
+
+  // Handle adding a new certificate dynamically (Cloud + Local)
+  const handleAddCertificate = async (e) => {
     e?.preventDefault();
     if (!newCertForm.title.trim()) return;
 
@@ -130,25 +136,53 @@ export default function SkillsPage({ onNavigate }) {
       status: 'Verified',
     };
 
-    setCertificates((prev) => [...prev, newEntry]);
-    setNewCertForm({
-      title: '',
-      issuer: '',
-      credentialId: '',
-      issueDate: '',
-      verificationUrl: '',
-      skillsCovered: '',
-      image: '',
-    });
-    setShowAddModal(false);
+    try {
+      setIsSubmitting(true);
+      await saveCertificateService(newEntry);
+      setCertificates((prev) => [newEntry, ...prev.filter((c) => c.id !== newEntry.id)]);
+      setNewCertForm({
+        title: '',
+        issuer: '',
+        credentialId: '',
+        issueDate: '',
+        verificationUrl: '',
+        skillsCovered: '',
+        image: '',
+      });
+      setShowAddModal(false);
+    } catch (err) {
+      console.error('Error saving certificate to cloud:', err);
+      // Fallback
+      setCertificates((prev) => [newEntry, ...prev.filter((c) => c.id !== newEntry.id)]);
+      setShowAddModal(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  // Handle removing a certificate
+  // Handle removing a certificate (Admin Gated + Cloud)
   const handleRemoveCertificate = (id, e) => {
     e?.stopPropagation();
-    setCertificates((prev) => prev.filter((c) => c.id !== id));
-    if (selectedCert?.id === id) {
-      setSelectedCert(null);
+    if (!isAdminAuthenticated()) {
+      setPendingAdminAction(() => () => executeDeleteCertificate(id));
+      setShowAdminModal(true);
+      return;
+    }
+    if (window.confirm('Are you sure you want to delete this certificate from your portfolio?')) {
+      executeDeleteCertificate(id);
+    }
+  };
+
+  const executeDeleteCertificate = async (id) => {
+    try {
+      await deleteCertificateService(id);
+      setCertificates((prev) => prev.filter((c) => c.id !== id));
+      if (selectedCert?.id === id) {
+        setSelectedCert(null);
+      }
+    } catch (err) {
+      console.error('Error deleting certificate:', err);
+      alert('Error deleting certificate from database.');
     }
   };
 
@@ -1497,7 +1531,7 @@ export default function SkillsPage({ onNavigate }) {
 
                 <button
                   type="button"
-                  onClick={() => setShowAddModal(true)}
+                  onClick={handleOpenAddModal}
                   className="btn-primary"
                   style={{
                     padding: '12px 20px',
@@ -1518,7 +1552,7 @@ export default function SkillsPage({ onNavigate }) {
 
               {/* + Add New Certificate Action Card */}
               <div
-                onClick={() => setShowAddModal(true)}
+                onClick={handleOpenAddModal}
                 style={{
                   padding: '32px 28px',
                   borderRadius: '20px',
@@ -1877,7 +1911,7 @@ export default function SkillsPage({ onNavigate }) {
 
               {/* + Add New Certificate Placeholder Card in Grid */}
               <div
-                onClick={() => setShowAddModal(true)}
+                onClick={handleOpenAddModal}
                 style={{
                   padding: '24px',
                   borderRadius: '20px',
@@ -2649,6 +2683,23 @@ export default function SkillsPage({ onNavigate }) {
           </span>
         </div>
       </footer>
+
+      {/* Admin Authentication Modal */}
+      <AdminAuthModal
+        isOpen={showAdminModal}
+        onClose={() => {
+          setShowAdminModal(false);
+          setPendingAdminAction(null);
+        }}
+        onSuccess={() => {
+          if (pendingAdminAction) {
+            const action = pendingAdminAction;
+            setPendingAdminAction(null);
+            action();
+          }
+        }}
+        title="Admin Verification"
+      />
     </div>
   );
 }

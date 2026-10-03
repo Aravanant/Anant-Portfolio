@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
+  fetchProjectsService,
+  saveProjectService,
+  deleteProjectService,
+  isAdminAuthenticated,
+} from './supabase';
+import AdminAuthModal from './AdminAuthModal';
+import {
   LogoIcon,
   DownloadIcon,
   MoonIcon,
@@ -27,6 +34,9 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
   const [showAddModal, setShowAddModal] = useState(false);
   const [activeAddTab, setActiveAddTab] = useState('form');
   const [copiedCode, setCopiedCode] = useState(false);
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [pendingAdminAction, setPendingAdminAction] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Initial projects state initialized from localStorage, defaulting to empty array (NO dummy projects)
   const [projects, setProjects] = useState(() => {
@@ -34,7 +44,6 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
       const saved = localStorage.getItem('anant_portfolio_projects');
       if (!saved) return [];
       const parsed = JSON.parse(saved);
-      // Remove any legacy dummy project IDs
       const dummyIds = ['churn', 'sales-bi', 'supply-chain', 'hr-attrition'];
       return Array.isArray(parsed) ? parsed.filter((p) => !dummyIds.includes(p.id)) : [];
     } catch (e) {
@@ -42,14 +51,14 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
     }
   });
 
-  // Sync to localStorage
+  // Fetch projects from Supabase on component mount
   useEffect(() => {
-    try {
-      localStorage.setItem('anant_portfolio_projects', JSON.stringify(projects));
-    } catch (e) {
-      console.error('Failed to save projects to localStorage', e);
-    }
-  }, [projects]);
+    fetchProjectsService().then((data) => {
+      if (data && Array.isArray(data)) {
+        setProjects(data);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -79,6 +88,16 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
 
   const [newProjForm, setNewProjForm] = useState(defaultProjForm);
 
+  // Admin gate for opening Add Project modal
+  const handleOpenAddModal = () => {
+    if (!isAdminAuthenticated()) {
+      setPendingAdminAction(() => () => setShowAddModal(true));
+      setShowAdminModal(true);
+      return;
+    }
+    setShowAddModal(true);
+  };
+
   // File Upload Handler (Converts uploaded image/file to Data URL)
   const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
@@ -99,8 +118,8 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
     reader.readAsDataURL(file);
   };
 
-  // Add Project Submission Handler
-  const handleAddProject = (e) => {
+  // Add Project Submission Handler (Cloud + Local)
+  const handleAddProject = async (e) => {
     e.preventDefault();
     if (!newProjForm.title.trim()) {
       alert('Please provide a Project Title.');
@@ -159,19 +178,46 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
       createdAt: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
     };
 
-    setProjects((prev) => [newProject, ...prev]);
-    setNewProjForm(defaultProjForm);
-    setShowAddModal(false);
+    try {
+      setIsSubmitting(true);
+      await saveProjectService(newProject);
+      setProjects((prev) => [newProject, ...prev.filter((p) => p.id !== newProject.id)]);
+      setNewProjForm(defaultProjForm);
+      setShowAddModal(false);
+    } catch (err) {
+      console.error('Error saving project to cloud:', err);
+      // Local fallback
+      setProjects((prev) => [newProject, ...prev.filter((p) => p.id !== newProject.id)]);
+      setNewProjForm(defaultProjForm);
+      setShowAddModal(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  // Remove Project Handler
+  // Remove Project Handler (Admin Gated + Cloud)
   const handleRemoveProject = (id, e) => {
     e.stopPropagation();
+    if (!isAdminAuthenticated()) {
+      setPendingAdminAction(() => () => executeDeleteProject(id));
+      setShowAdminModal(true);
+      return;
+    }
     if (window.confirm('Are you sure you want to delete this project from your portfolio?')) {
+      executeDeleteProject(id);
+    }
+  };
+
+  const executeDeleteProject = async (id) => {
+    try {
+      await deleteProjectService(id);
       setProjects((prev) => prev.filter((p) => p.id !== id));
       if (selectedProject?.id === id) {
         setSelectedProject(null);
       }
+    } catch (err) {
+      console.error('Error deleting project from database:', err);
+      alert('Error deleting project.');
     }
   };
 
@@ -526,7 +572,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
             {/* Quick Add Project Trigger Button */}
             <button
               type="button"
-              onClick={() => setShowAddModal(true)}
+              onClick={handleOpenAddModal}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -591,7 +637,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
 
             <button
               type="button"
-              onClick={() => setShowAddModal(true)}
+              onClick={handleOpenAddModal}
               className="btn-primary"
               style={{
                 display: 'inline-flex',
@@ -721,7 +767,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
 
                 <button
                   type="button"
-                  onClick={() => setShowAddModal(true)}
+                  onClick={handleOpenAddModal}
                   className="btn-primary"
                   style={{
                     padding: '14px 24px',
@@ -742,7 +788,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
 
               {/* + Add New Project Dashed Action Card */}
               <div
-                onClick={() => setShowAddModal(true)}
+                onClick={handleOpenAddModal}
                 style={{
                   padding: '36px 32px',
                   borderRadius: '24px',
@@ -1180,7 +1226,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
 
               {/* Appended "+ Add Another Project" Action Card at the end of the list */}
               <div
-                onClick={() => setShowAddModal(true)}
+                onClick={handleOpenAddModal}
                 style={{
                   padding: '24px',
                   borderRadius: '20px',
@@ -1401,7 +1447,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
             >
               <button
                 type="button"
-                onClick={() => setShowAddModal(true)}
+                onClick={handleOpenAddModal}
                 className="btn-primary"
                 style={{ padding: '12px 26px', fontSize: '0.95rem', cursor: 'pointer' }}
               >
@@ -2276,6 +2322,23 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
           </span>
         </div>
       </footer>
+
+      {/* Admin Authentication Modal */}
+      <AdminAuthModal
+        isOpen={showAdminModal}
+        onClose={() => {
+          setShowAdminModal(false);
+          setPendingAdminAction(null);
+        }}
+        onSuccess={() => {
+          if (pendingAdminAction) {
+            const action = pendingAdminAction;
+            setPendingAdminAction(null);
+            action();
+          }
+        }}
+        title="Admin Verification"
+      />
     </div>
   );
 }
