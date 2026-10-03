@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar';
 import SmoothScrollAnimation from './SmoothScrollAnimation';
 import DashboardSection from './DashboardSection';
 import ProjectsPage from './ProjectsPage';
@@ -268,171 +269,28 @@ export default function App() {
 
       {/* Main Content Layer */}
       <div style={{ position: 'relative', zIndex: 10, width: '100%' }}>
-        {/* Navigation Bar */}
-        <header
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 100,
-            background: 'var(--nav-bg)',
-            backdropFilter: 'blur(16px)',
-            borderBottom: '1px solid var(--nav-border)',
-            transition: 'background 0.3s ease, border 0.3s ease',
+        {/* Unified Responsive Navigation Bar */}
+        <Navbar
+          activeNav={activeNav}
+          currentPage={currentPage}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          onNavigate={(target) => {
+            if (target === 'projects') navigateTo('projects');
+            else if (target === 'about') navigateTo('about');
+            else if (target === 'skills') navigateTo('skills');
+            else if (target === 'experience') navigateTo('experience');
+            else if (target === 'contact') navigateTo('contact');
+            else if (target === 'resume') navigateTo('resume');
+            else if (target === 'home') navigateTo('home');
+            else scrollToSection(target);
           }}
-        >
-          <div
-            style={{
-              maxWidth: '1240px',
-              margin: '0 auto',
-              padding: '16px 24px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            {/* Logo */}
-            <a
-              href="#home"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('home');
-              }}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                textDecoration: 'none',
-                color: 'var(--nav-text)',
-                fontWeight: 800,
-                fontSize: '1.25rem',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              <LogoIcon size={26} color="#f97316" />
-              <span>DataPortfolio</span>
-            </a>
-
-            {/* Navigation Links */}
-            <nav
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '30px',
-              }}
-              className="desktop-nav"
-            >
-              {[
-                { id: 'home', label: 'Home' },
-                { id: 'about', label: 'About' },
-                { id: 'skills', label: 'Skills' },
-                { id: 'projects', label: 'Projects' },
-                { id: 'experience', label: 'Experience' },
-                { id: 'contact', label: 'Contact' },
-              ].map((item) => (
-                <a
-                  key={item.id}
-                  href={
-                    item.id === 'projects'
-                      ? '/projects'
-                      : item.id === 'about'
-                      ? '/about'
-                      : item.id === 'skills'
-                      ? '/skills'
-                      : item.id === 'experience'
-                      ? '/experience'
-                      : item.id === 'contact'
-                      ? '/contact'
-                      : `#${item.id}`
-                  }
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (item.id === 'projects') {
-                      navigateTo('projects');
-                    } else if (item.id === 'about') {
-                      navigateTo('about');
-                    } else if (item.id === 'skills') {
-                      navigateTo('skills');
-                    } else if (item.id === 'experience') {
-                      navigateTo('experience');
-                    } else if (item.id === 'contact') {
-                      navigateTo('contact');
-                    } else {
-                      scrollToSection(item.id);
-                    }
-                  }}
-                  style={{
-                    textDecoration: 'none',
-                    fontSize: '0.95rem',
-                    fontWeight: activeNav === item.id ? 700 : 500,
-                    color: activeNav === item.id ? 'var(--accent-orange)' : 'var(--nav-text-muted)',
-                    position: 'relative',
-                    padding: '6px 0',
-                    transition: 'color 0.2s ease',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {item.label}
-                  {activeNav === item.id && (
-                    <span
-                      style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '18px',
-                        height: '2.5px',
-                        borderRadius: '2px',
-                        backgroundColor: 'var(--accent-orange)',
-                      }}
-                    />
-                  )}
-                </a>
-              ))}
-            </nav>
-
-            {/* Right Action Buttons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              {/* Theme Toggle Button */}
-              <button
-                type="button"
-                onClick={toggleTheme}
-                aria-label="Toggle Dark/Light Mode"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  color: '#ffffff',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
-              </button>
-
-              {/* Download Resume Button */}
-              <button
-                type="button"
-                onClick={() => navigateTo('resume')}
-                className="btn-primary"
-                style={{ padding: '10px 22px', fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-              >
-                <DownloadIcon size={16} />
-                <span>Download Resume</span>
-              </button>
-            </div>
-          </div>
-        </header>
+        />
 
         {/* Hero Section */}
         <section
           id="home"
+          className="hero-container"
           style={{
             position: 'relative',
             minHeight: '100vh',
@@ -443,13 +301,21 @@ export default function App() {
             margin: '0 auto',
           }}
         >
-          {/* Hero Content Left - Clean typography over canvas with zero blurry background box */}
+          {/* Hero Content Left - Clean typography over canvas */}
           <div
             style={{
               maxWidth: '580px',
               zIndex: 2,
             }}
           >
+            {/* Inline Freelance Badge on Mobile (< 900px) */}
+            <div className="hero-badge-mobile" style={{ display: 'none' }}>
+              <div className="freelance-badge" style={{ animation: 'none' }}>
+                <span className="status-dot" />
+                <span>Open to Analyst Roles</span>
+              </div>
+            </div>
+
             <p
               style={{
                 fontSize: '1.2rem',
@@ -466,7 +332,7 @@ export default function App() {
 
             <h1
               style={{
-                fontSize: 'clamp(2.8rem, 5.5vw, 4.2rem)',
+                fontSize: 'clamp(2.4rem, 6vw, 4.2rem)',
                 fontWeight: 800,
                 lineHeight: 1.1,
                 letterSpacing: '-0.03em',
@@ -479,7 +345,7 @@ export default function App() {
 
             <h2
               style={{
-                fontSize: 'clamp(2.8rem, 5.5vw, 4.2rem)',
+                fontSize: 'clamp(2.4rem, 6vw, 4.2rem)',
                 fontWeight: 800,
                 lineHeight: 1.1,
                 letterSpacing: '-0.03em',
@@ -505,6 +371,7 @@ export default function App() {
 
             {/* CTA Buttons */}
             <div
+              className="hero-btn-group"
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -535,7 +402,7 @@ export default function App() {
             </div>
 
             {/* Social Links */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
               <span
                 style={{
                   fontSize: '0.95rem',
@@ -588,8 +455,9 @@ export default function App() {
             </div>
           </div>
 
-          {/* Floating Badge (Top-Right on Hero next to portrait) */}
+          {/* Floating Badge (Top-Right on Hero on Desktop) */}
           <div
+            className="hero-badge-desktop"
             style={{
               position: 'absolute',
               right: '24px',
@@ -605,6 +473,7 @@ export default function App() {
 
           {/* Mouse Scroll Indicator (Centered at Bottom of Hero) */}
           <div
+            className="hero-scroll-indicator"
             style={{
               position: 'absolute',
               bottom: '24px',
@@ -637,9 +506,10 @@ export default function App() {
         >
           <div className="sections-card">
             <div
+              className="responsive-grid-320"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
                 gap: '40px',
               }}
             >
@@ -736,17 +606,19 @@ export default function App() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        gap: '16px',
+                        gap: '12px',
                       }}
                     >
                       {/* Icon & Name */}
                       <div
+                        className="home-skill-name"
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '10px',
-                          width: '180px',
-                          flexShrink: 0,
+                          gap: '8px',
+                          minWidth: '100px',
+                          maxWidth: '175px',
+                          flex: '0 1 auto',
                         }}
                       >
                         {skill.icon}

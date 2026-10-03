@@ -321,6 +321,59 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Navigation Responsive Controls */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.mobile-menu-trigger {
+  display: none !important;
+}
+
+@keyframes fadeInBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDrawer {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.mobile-nav-drawer.open {
+  animation: slideInDrawer 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Horizontal pill scrollbar hiding */
+.pill-scroll-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.pill-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure grid items never exceed their container */
+.responsive-grid-320 > *,
+.responsive-grid-340 > *,
+.responsive-grid-300 > * {
+  min-width: 0;
+}
+
 /* Responsive adjustments */
 @media (min-width: 1024px) {
   .lg-span-4 {
@@ -331,8 +384,105 @@ body {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 899px) {
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .mobile-menu-trigger {
+    display: flex !important;
+  }
+
+  .desktop-resume-btn {
+    display: none !important;
+  }
+
   .sections-card {
     padding: 10px 0 !important;
+  }
+
+  /* Hero adjustments */
+  .hero-container {
+    padding: 100px 18px 50px 18px !important;
+    min-height: auto !important;
+  }
+
+  .hero-badge-desktop {
+    display: none !important;
+  }
+
+  .hero-badge-mobile {
+    display: inline-flex !important;
+    margin-bottom: 16px;
+  }
+
+  .hero-scroll-indicator {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Prevent horizontal overflow */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Make grid containers stack cleanly without overflowing */
+  .responsive-grid-320,
+  .responsive-grid-340,
+  .responsive-grid-300 {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .responsive-grid-320 > *,
+  .responsive-grid-340 > *,
+  .responsive-grid-300 > * {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Hero buttons */
+  .hero-btn-group {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  .hero-btn-group .btn-primary,
+  .hero-btn-group .btn-hero-contact {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Modals */
+  .responsive-modal-box {
+    padding: 20px 16px !important;
+    border-radius: 18px !important;
+    width: 95% !important;
+  }
+
+  .responsive-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Skills progress bar in Home */
+  .home-skill-name {
+    width: 110px !important;
+    font-size: 0.82rem !important;
+  }
+
+  /* Dashboard Months timeline */
+  .dashboard-months-timeline {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 8px !important;
+    padding-bottom: 6px !important;
+  }
+
+  /* Global section paddings */
+  section[id] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar';
 import {
   LogoIcon,
   DownloadIcon,
@@ -141,157 +142,17 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
         fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
       }}
     >
-      {/* Navigation Bar */}
-      <header
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          background: 'rgba(12, 18, 25, 0.92)',
-          backdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          transition: 'all 0.3s ease',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1240px',
-            margin: '0 auto',
-            padding: '16px 24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          {/* Logo */}
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              (onNavigate || onNavigateHome)('home');
-            }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              textDecoration: 'none',
-              color: '#ffffff',
-              fontWeight: 800,
-              fontSize: '1.25rem',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            <LogoIcon size={26} color="#f97316" />
-            <span>DataPortfolio</span>
-          </a>
-
-          {/* Navigation Links */}
-          <nav
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '28px',
-            }}
-            className="desktop-nav"
-          >
-            {[
-              { id: 'home', label: 'Home' },
-              { id: 'about', label: 'About' },
-              { id: 'skills', label: 'Skills' },
-              { id: 'projects', label: 'Projects' },
-              { id: 'experience', label: 'Experience' },
-              { id: 'contact', label: 'Contact' },
-            ].map((item) => (
-              <a
-                key={item.id}
-                href={
-                  item.id === 'contact'
-                    ? '/contact'
-                    : item.id === 'about'
-                    ? '/about'
-                    : item.id === 'skills'
-                    ? '/skills'
-                    : item.id === 'projects'
-                    ? '/projects'
-                    : item.id === 'experience'
-                    ? '/experience'
-                    : `/#${item.id}`
-                }
-                onClick={(e) => {
-                  if (item.id !== 'contact') {
-                    e.preventDefault();
-                    (onNavigate || onNavigateHome)(item.id);
-                  }
-                }}
-                style={{
-                  textDecoration: 'none',
-                  fontSize: '0.95rem',
-                  fontWeight: item.id === 'contact' ? 700 : 500,
-                  color: item.id === 'contact' ? 'var(--accent-orange)' : 'var(--nav-text-muted)',
-                  position: 'relative',
-                  padding: '6px 0',
-                  transition: 'color 0.2s ease',
-                }}
-              >
-                {item.label}
-                {item.id === 'contact' && (
-                  <span
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: '18px',
-                      height: '2.5px',
-                      borderRadius: '2px',
-                      backgroundColor: 'var(--accent-orange)',
-                    }}
-                  />
-                )}
-              </a>
-            ))}
-          </nav>
-
-          {/* Right Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label="Toggle Dark/Light Mode"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                color: '#ffffff',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => (onNavigate || onNavigateHome)('resume')}
-              className="btn-primary"
-              style={{ padding: '10px 22px', fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-            >
-              <DownloadIcon size={16} />
-              <span>Download Resume</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Unified Responsive Navigation Bar */}
+      <Navbar
+        activeNav="contact"
+        currentPage="contact"
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onNavigate={onNavigate || onNavigateHome}
+      />
 
       {/* Main Container */}
-      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '120px 24px 80px 24px' }}>
+      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(90px, 12vw, 120px) clamp(16px, 3vw, 24px) 80px clamp(16px, 3vw, 24px)' }}>
         {/* =========================================================================
             HEADER & HERO: LET'S CONNECT!
            ========================================================================= */}
@@ -378,9 +239,10 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
             TWO-COLUMN SPLIT: DIRECT CHANNELS & RESUME (LEFT) vs MESSAGE FORM (RIGHT)
            ========================================================================= */}
         <div
+          className="responsive-grid-340"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
             gap: '36px',
             alignItems: 'start',
           }}
@@ -392,7 +254,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
             {/* SECTION 1: 📥 FIND ME AROUND THE WEB */}
             <div
               style={{
-                padding: '32px',
+                padding: 'clamp(18px, 4vw, 32px)',
                 borderRadius: '24px',
                 background: 'rgba(255, 255, 255, 0.03)',
                 border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -425,8 +287,8 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                     e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
                       <div
                         style={{
                           width: '42px',
@@ -443,7 +305,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                       >
                         <MailIcon size={20} />
                       </div>
-                      <div>
+                      <div style={{ minWidth: 0 }}>
                         <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
                           📧 Email (Click to send an email)
                         </div>
@@ -455,6 +317,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                             color: '#ffffff',
                             textDecoration: 'none',
                             wordBreak: 'break-all',
+                            overflowWrap: 'anywhere',
                             transition: 'color 0.2s ease',
                           }}
                           onMouseEnter={(e) => (e.currentTarget.style.color = '#f97316')}
@@ -497,6 +360,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: '12px',
+                    flexWrap: 'wrap',
                     padding: '18px',
                     borderRadius: '16px',
                     background: 'rgba(255, 255, 255, 0.02)',
@@ -515,7 +379,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: '1 1 200px' }}>
                     <div
                       style={{
                         width: '42px',
@@ -532,12 +396,12 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                     >
                       <LinkedinIcon size={20} />
                     </div>
-                    <div>
+                    <div style={{ minWidth: 0 }}>
                       <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
                         💼 LinkedIn
                       </div>
-                      <div style={{ fontSize: '1rem', fontWeight: 700, color: '#ffffff' }}>
-                        www.linkedin.com/in/anant-singh-se
+                      <div style={{ fontSize: '1rem', fontWeight: 700, color: '#ffffff', wordBreak: 'break-all', overflowWrap: 'anywhere' }}>
+                        linkedin.com/in/anant-singh-se
                       </div>
                       <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '2px' }}>
                         (Where I network and share my learning journey)
@@ -545,7 +409,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                     </div>
                   </div>
 
-                  <span style={{ color: '#f97316', fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ color: '#f97316', fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
                     Connect <ExternalLinkIcon size={14} />
                   </span>
                 </a>
@@ -560,6 +424,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: '12px',
+                    flexWrap: 'wrap',
                     padding: '18px',
                     borderRadius: '16px',
                     background: 'rgba(255, 255, 255, 0.02)',
@@ -578,7 +443,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: '1 1 200px' }}>
                     <div
                       style={{
                         width: '42px',
@@ -595,12 +460,12 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                     >
                       <GithubIcon size={20} />
                     </div>
-                    <div>
+                    <div style={{ minWidth: 0 }}>
                       <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
                         💻 GitHub
                       </div>
-                      <div style={{ fontSize: '1rem', fontWeight: 700, color: '#ffffff' }}>
-                        https://github.com/Aravanant
+                      <div style={{ fontSize: '1rem', fontWeight: 700, color: '#ffffff', wordBreak: 'break-all', overflowWrap: 'anywhere' }}>
+                        github.com/Aravanant
                       </div>
                       <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '2px' }}>
                         (Check out my raw SQL and Python code)
@@ -608,7 +473,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
                     </div>
                   </div>
 
-                  <span style={{ color: '#f97316', fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ color: '#f97316', fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
                     Explore <ExternalLinkIcon size={14} />
                   </span>
                 </a>
@@ -618,7 +483,7 @@ export default function ContactPage({ onNavigateHome, onNavigate = onNavigateHom
             {/* SECTION 2: 📄 LOOKING FOR MY RESUME? */}
             <div
               style={{
-                padding: '32px',
+                padding: 'clamp(18px, 4vw, 32px)',
                 borderRadius: '24px',
                 background:
                   'linear-gradient(135deg, rgba(249, 115, 22, 0.12) 0%, rgba(12, 18, 25, 0.95) 100%)',

@@ -367,7 +367,7 @@ export default function DashboardSection() {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
                 alignItems: 'center',
                 gap: '28px',
               }}
@@ -605,6 +605,7 @@ export default function DashboardSection() {
 
             {/* X-Axis Months Timeline in Accent Orange */}
             <div
+              className="dashboard-months-timeline"
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -624,8 +625,9 @@ export default function DashboardSection() {
                       fontWeight: isHighlight ? 800 : 600,
                       color: isHighlight ? '#ffffff' : '#cbd5e1',
                       background: isHighlight ? '#f97316' : 'transparent',
-                      padding: isHighlight ? '3px 8px' : '3px 0',
+                      padding: isHighlight ? '3px 7px' : '3px 4px',
                       borderRadius: '4px',
+                      flexShrink: 0,
                       boxShadow: isHighlight ? '0 2px 8px rgba(249, 115, 22, 0.5)' : 'none',
                     }}
                   >

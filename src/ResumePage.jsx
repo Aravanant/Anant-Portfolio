@@ -246,18 +246,45 @@ export default function ResumePage({ onNavigate, isModal = false, onClose }) {
         </div>
       </div>
 
-      {/* =========================================================================
-          THE STRICT 1-PAGE RESUME DOCUMENT CONTAINER
-          Engineered to fit precisely on a single A4 / Letter page (max-height: 297mm)
-          Color scheme: Blue for URLs, Black for everything else
-         ========================================================================= */}
+      {/* Mobile inspection hint banner */}
       <div
-        id="resume-document"
-        className="resume-page-container"
+        className="no-print"
         style={{
-          width: '210mm',
-          minHeight: '297mm',
-          maxHeight: '297mm',
+          fontSize: '0.8rem',
+          color: '#94a3b8',
+          marginBottom: '14px',
+          textAlign: 'center',
+          maxWidth: '850px',
+          padding: '0 10px',
+        }}
+      >
+        💡 <strong style={{ color: '#cbd5e1' }}>Tip:</strong> The preview below matches exact single-page A4 print format. On mobile, scroll horizontally or tap "Save as 1-Page PDF".
+      </div>
+
+      {/* Responsive Preview Wrapper for Mobile & Desktop */}
+      <div
+        className="resume-preview-wrapper"
+        style={{
+          width: '100%',
+          overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          display: 'flex',
+          justifyContent: 'center',
+          paddingBottom: '24px',
+        }}
+      >
+        {/* =========================================================================
+            THE STRICT 1-PAGE RESUME DOCUMENT CONTAINER
+            Engineered to fit precisely on a single A4 / Letter page (max-height: 297mm)
+            Color scheme: Blue for URLs, Black for everything else
+           ========================================================================= */}
+        <div
+          id="resume-document"
+          className="resume-page-container"
+          style={{
+            width: '210mm',
+            minHeight: '297mm',
+            maxHeight: '297mm',
           background: '#ffffff',
           color: '#000000',
           padding: hasExperience && hasCertificates ? '9mm 12mm' : '11mm 13mm',
@@ -829,6 +856,12 @@ export default function ResumePage({ onNavigate, isModal = false, onClose }) {
             .no-print {
               display: none !important;
             }
+            .resume-preview-wrapper {
+              overflow: visible !important;
+              width: 100% !important;
+              display: block !important;
+              padding: 0 !important;
+            }
             #resume-document {
               width: 210mm !important;
               height: 297mm !important;
@@ -851,6 +884,7 @@ export default function ResumePage({ onNavigate, isModal = false, onClose }) {
           }
         `}</style>
       </div>
+    </div>
     </div>
   );
 }

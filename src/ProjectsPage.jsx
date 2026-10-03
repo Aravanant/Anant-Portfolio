@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar';
 import {
   fetchProjectsService,
   saveProjectService,
@@ -297,157 +298,17 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
         fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
       }}
     >
-      {/* Navigation Bar */}
-      <header
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          background: 'rgba(12, 18, 25, 0.92)',
-          backdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          transition: 'all 0.3s ease',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1240px',
-            margin: '0 auto',
-            padding: '16px 24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          {/* Logo */}
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              (onNavigate || onNavigateHome)('home');
-            }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              textDecoration: 'none',
-              color: '#ffffff',
-              fontWeight: 800,
-              fontSize: '1.25rem',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            <LogoIcon size={26} color="#f97316" />
-            <span>DataPortfolio</span>
-          </a>
-
-          {/* Navigation Links */}
-          <nav
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '28px',
-            }}
-            className="desktop-nav"
-          >
-            {[
-              { id: 'home', label: 'Home' },
-              { id: 'about', label: 'About' },
-              { id: 'skills', label: 'Skills' },
-              { id: 'projects', label: 'Projects' },
-              { id: 'experience', label: 'Experience' },
-              { id: 'contact', label: 'Contact' },
-            ].map((item) => (
-              <a
-                key={item.id}
-                href={
-                  item.id === 'projects'
-                    ? '/projects'
-                    : item.id === 'about'
-                    ? '/about'
-                    : item.id === 'skills'
-                    ? '/skills'
-                    : item.id === 'experience'
-                    ? '/experience'
-                    : item.id === 'contact'
-                    ? '/contact'
-                    : `/#${item.id}`
-                }
-                onClick={(e) => {
-                  if (item.id !== 'projects') {
-                    e.preventDefault();
-                    (onNavigate || onNavigateHome)(item.id);
-                  }
-                }}
-                style={{
-                  textDecoration: 'none',
-                  fontSize: '0.95rem',
-                  fontWeight: item.id === 'projects' ? 700 : 500,
-                  color: item.id === 'projects' ? 'var(--accent-orange)' : 'var(--nav-text-muted)',
-                  position: 'relative',
-                  padding: '6px 0',
-                  transition: 'color 0.2s ease',
-                }}
-              >
-                {item.label}
-                {item.id === 'projects' && (
-                  <span
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: '18px',
-                      height: '2.5px',
-                      borderRadius: '2px',
-                      backgroundColor: 'var(--accent-orange)',
-                    }}
-                  />
-                )}
-              </a>
-            ))}
-          </nav>
-
-          {/* Right Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label="Toggle Dark/Light Mode"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                color: '#ffffff',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              {theme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => (onNavigate || onNavigateHome)('resume')}
-              className="btn-primary"
-              style={{ padding: '10px 22px', fontSize: '0.9rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-            >
-              <DownloadIcon size={16} />
-              <span>Download Resume</span>
-            </button>
-          </div>
-        </div>
-      </header>
+      {/* Unified Responsive Navigation Bar */}
+      <Navbar
+        activeNav="projects"
+        currentPage="projects"
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onNavigate={onNavigate || onNavigateHome}
+      />
 
       {/* Main Container */}
-      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '120px 24px 80px 24px' }}>
+      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(90px, 12vw, 120px) clamp(16px, 3vw, 24px) 80px clamp(16px, 3vw, 24px)' }}>
         {/* =========================================================================
             SECTION 1: TITLE & SUBTEXT REGARDING THIS PAGE + ANALYTICS HIGHLIGHTS
            ========================================================================= */}
@@ -656,9 +517,10 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
           {/* Project Showcase Grid or Empty Vault State */}
           {projects.length === 0 ? (
             <div
+              className="responsive-grid-320"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
                 gap: '28px',
                 alignItems: 'stretch',
               }}
@@ -894,11 +756,12 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
                 filteredProjects.map((proj) => (
                   <article
                     key={proj.id}
+                    className="responsive-grid-320"
                     style={{
                       display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
                       gap: '32px',
-                      padding: '28px',
+                      padding: 'clamp(18px, 3.5vw, 28px)',
                       borderRadius: '24px',
                       background: 'rgba(255, 255, 255, 0.03)',
                       border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -1496,6 +1359,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
           onClick={() => setSelectedProject(null)}
         >
           <div
+            className="responsive-modal-box"
             style={{
               position: 'relative',
               maxWidth: '720px',
@@ -1505,7 +1369,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
               background: '#0d141e',
               border: '1px solid rgba(249, 115, 22, 0.4)',
               borderRadius: '24px',
-              padding: '32px',
+              padding: 'clamp(20px, 4vw, 32px)',
               boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7)',
             }}
             onClick={(e) => e.stopPropagation()}
@@ -1718,6 +1582,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
           onClick={() => setShowAddModal(false)}
         >
           <div
+            className="responsive-modal-box"
             style={{
               position: 'relative',
               maxWidth: '680px',
@@ -1727,7 +1592,7 @@ export default function ProjectsPage({ onNavigateHome, onNavigate = onNavigateHo
               background: '#0d141e',
               border: '1px solid rgba(249, 115, 22, 0.4)',
               borderRadius: '24px',
-              padding: '30px',
+              padding: 'clamp(20px, 4vw, 30px)',
               boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7)',
             }}
             onClick={(e) => e.stopPropagation()}

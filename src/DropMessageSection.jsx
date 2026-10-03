@@ -94,8 +94,9 @@ export default function DropMessageSection({ isStandalone = true }) {
 
   const formCard = (
     <div
+      className="responsive-modal-box"
       style={{
-        padding: '36px 32px',
+        padding: 'clamp(20px, 4vw, 36px) clamp(16px, 3.5vw, 32px)',
         borderRadius: '24px',
         background: 'transparent',
         border: '1px solid rgba(255, 255, 255, 0.12)',
@@ -109,10 +110,10 @@ export default function DropMessageSection({ isStandalone = true }) {
       }}
     >
       <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ fontSize: '1.5rem' }}>✉️</span>
-            <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#ffffff', margin: 0, letterSpacing: '-0.01em' }}>
+            <h2 style={{ fontSize: 'clamp(1.2rem, 3vw, 1.45rem)', fontWeight: 800, color: '#ffffff', margin: 0, letterSpacing: '-0.01em' }}>
               Drop a Message Right Here
             </h2>
           </div>

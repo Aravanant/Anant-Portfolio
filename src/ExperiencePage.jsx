@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar';
 import {
   fetchExperiencesService,
   saveExperienceService,
@@ -310,155 +311,17 @@ export default function ExperiencePage({ onNavigate }) {
         fontFamily: "'Plus Jakarta Sans', sans-serif",
       }}
     >
-      {/* =========================================================================
-          HEADER / NAVIGATION BAR
-         ========================================================================= */}
-      <header
-        style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 100,
-          background: 'rgba(12, 18, 25, 0.85)',
-          backdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1240px',
-            margin: '0 auto',
-            padding: '16px 24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          {/* Logo */}
-          <div
-            onClick={() => onNavigate('home')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              cursor: 'pointer',
-            }}
-          >
-            <LogoIcon size={26} color="#f97316" />
-            <span style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>
-              Data<span style={{ color: '#f97316' }}>Portfolio</span>
-            </span>
-          </div>
+      {/* Unified Responsive Navigation Bar */}
+      <Navbar
+        activeNav="experience"
+        currentPage="experience"
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onNavigate={onNavigate}
+      />
 
-          {/* Desktop Navigation */}
-          <nav
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '28px',
-            }}
-            className="desktop-nav"
-          >
-            {[
-              { id: 'home', label: 'Home' },
-              { id: 'about', label: 'About' },
-              { id: 'skills', label: 'Skills' },
-              { id: 'projects', label: 'Projects' },
-              { id: 'experience', label: 'Experience' },
-              { id: 'contact', label: 'Contact' },
-            ].map((item) => (
-              <a
-                key={item.id}
-                href={
-                  item.id === 'experience'
-                    ? '/experience'
-                    : item.id === 'skills'
-                    ? '/skills'
-                    : item.id === 'about'
-                    ? '/about'
-                    : item.id === 'projects'
-                    ? '/projects'
-                    : item.id === 'contact'
-                    ? '/contact'
-                    : `/#${item.id}`
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  onNavigate(item.id);
-                }}
-                style={{
-                  textDecoration: 'none',
-                  fontSize: '0.95rem',
-                  fontWeight: item.id === 'experience' ? 700 : 500,
-                  color: item.id === 'experience' ? 'var(--accent-orange)' : 'var(--nav-text-muted)',
-                  position: 'relative',
-                  padding: '6px 0',
-                  transition: 'color 0.2s ease',
-                }}
-              >
-                {item.label}
-                {item.id === 'experience' && (
-                  <span
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '2px',
-                      background: 'var(--accent-orange)',
-                      borderRadius: '2px',
-                    }}
-                  />
-                )}
-              </a>
-            ))}
-          </nav>
-
-          {/* Actions: Theme Toggle & Resume */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <button
-              onClick={toggleTheme}
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '50%',
-                width: '38px',
-                height: '38px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: '#ffffff',
-                transition: 'all 0.2s ease',
-              }}
-              aria-label="Toggle Theme"
-            >
-              {theme === 'light' ? <MoonIcon size={17} /> : <SunIcon size={17} />}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onNavigate('resume')}
-              className="btn-primary"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 18px',
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-              }}
-            >
-              <DownloadIcon size={16} />
-              <span>Download Resume</span>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* =========================================================================
-          MAIN CONTAINER
-         ========================================================================= */}
-      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '40px 24px 80px 24px' }}>
+      {/* Main Container */}
+      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(90px, 12vw, 120px) clamp(16px, 3vw, 24px) 80px clamp(16px, 3vw, 24px)' }}>
         {/* =========================================================================
             SECTION 1: HERO / CORE EXPERIENCE PHILOSOPHY
            ========================================================================= */}
